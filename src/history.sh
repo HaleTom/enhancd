@@ -17,12 +17,15 @@ __enhancd::history::origin()
 
 __enhancd::history::list()
 {
+    [[ -o pipefail ]] && local reset_pipefail=1
+    set +o pipefail
     __enhancd::history::origin \
         | __enhancd::filter::reverse \
         | __enhancd::filter::unique \
         | __enhancd::filter::exists \
         | __enhancd::filter::fuzzy "$@" \
         | __enhancd::utils::grep -vx "$PWD"
+    [[ $reset_pipefail ]] && set -o pipefail
 }
 
 __enhancd::history::update()
